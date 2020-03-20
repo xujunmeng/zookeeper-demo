@@ -1,6 +1,8 @@
 package com.junmeng.consumer;
 
-import com.junmeng.provider.ProviderService;
+
+import com.junmeng.model.InvokerService;
+import com.junmeng.model.ProviderService;
 
 import java.util.List;
 import java.util.Map;

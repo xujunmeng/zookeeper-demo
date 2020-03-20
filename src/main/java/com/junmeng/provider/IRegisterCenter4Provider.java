@@ -1,5 +1,7 @@
 package com.junmeng.provider;
 
+import com.junmeng.model.ProviderService;
+
 import java.util.List;
 import java.util.Map;
 

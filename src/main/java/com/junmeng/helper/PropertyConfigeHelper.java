@@ -1,8 +1,10 @@
 package com.junmeng.helper;
 
+import com.junmeng.common.SerializeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -16,21 +18,86 @@ public class PropertyConfigeHelper {
     private static final String PROPERTY_CLASSPATH = "/ares_remoting.properties";
     private static final Properties properties = new Properties();
 
-    //ZK服务地址
+    /**
+     * K服务地址
+     */
     private static String zkService = "";
 
-    //ZK session超时时间
+    /**
+     * ZK session超时时间
+     */
     private static int zkSessionTimeout;
 
-    //ZK connection超时时间
-    private static int zkConnectionTimout;
+    /**
+     * ZK connection超时时间
+     */
+    private static int zkConnectionTimeout;
 
-    //序列化算法类型
+    /**
+     * 序列化算法类型
+     */
     private static SerializeType serializeType;
 
-    //每个服务端提供者的Netty的连接数
-    private static int channelConnectionSize;
+    /**
+     * 每个服务端提供者的Netty的连接数
+     */
+    private static int channelConnectSize;
+
+    /**
+     * app name
+     */
+    private static String appName;
+
+    /**
+     * 初始化
+     */
+    static {
+        InputStream is = null;
+        try {
+            is = PropertyConfigeHelper.class.getResourceAsStream(PROPERTY_CLASSPATH);
+            if (is == null) {
+                throw new IllegalStateException("ares_remoting.properties can not found in the classpath.");
+            }
+            properties.load(is);
+
+            zkService = properties.getProperty("zk_service");
+            zkSessionTimeout = Integer.parseInt(properties.getProperty("zk_sessionTimeout", "500"));
+            zkConnectionTimeout = Integer.parseInt(properties.getProperty("zk_connectionTimeout", "500"));
+            channelConnectSize = Integer.parseInt(properties.getProperty("channel_connect_size", "10"));
+            appName = properties.getProperty("app_name", "zookeeper-demo");
+            String seriType = properties.getProperty("serialize_type");
+            serializeType = SerializeType.queryByType(seriType);
+            if (serializeType == null) {
+                throw new RuntimeException("serializeType is null");
+            }
 
 
+        } catch (Exception e) {
 
+        }
+    }
+
+    public static String getZkService() {
+        return zkService;
+    }
+
+    public static int getZkSessionTimeout() {
+        return zkSessionTimeout;
+    }
+
+    public static int getZkConnectionTimeout() {
+        return zkConnectionTimeout;
+    }
+
+    public static SerializeType getSerializeType() {
+        return serializeType;
+    }
+
+    public static int getChannelConnectSize() {
+        return channelConnectSize;
+    }
+
+    public static String getAppName() {
+        return appName;
+    }
 }
